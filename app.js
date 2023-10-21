@@ -40,14 +40,14 @@ function addNewBook() {
   const titleValue = title.value;
   const descValue = description.value;
   const publicValue = public.value;
-  const linkValue = linkBook.value;
+  // const linkValue = linkBook.value;
   const timestamp = +new Date();
   let book = {
     id: timestamp,
     title: titleValue,
-    description: descValue,
-    public: publicValue,
-    link: linkValue,
+    author: descValue,
+    year: publicValue,
+    isComplete: false,
   };
   const API = getAPI(unreadBooks);
   API.unshift(book);
@@ -76,29 +76,24 @@ function render(element, boxes) {
   const parent = document.querySelector(boxes);
   const box = document.createElement("div");
   const h6 = document.createElement("h6");
-  const pDesc = document.createElement("p");
+  const author = document.createElement("p");
   const pPublic = document.createElement("p");
-  const link = document.createElement("a");
 
   box.classList.add("box");
   box.id = element.id;
   h6.classList.add("title");
-  pDesc.classList.add("description");
+  author.classList.add("author");
   pPublic.classList.add("publication-year");
-  link.classList.add("link");
 
   // adding vale
   h6.textContent = element.title;
-  pDesc.textContent = element.description;
-  link.textContent = "Go";
-  link.setAttribute("href", `${element.link}`);
-  link.setAttribute("target", " _blank");
-  pPublic.textContent = element.public;
+  author.textContent = element.author;
+  pPublic.textContent = element.year;
 
   // enter to box
   box.appendChild(h6);
-  box.appendChild(pDesc);
-  box.appendChild(link);
+  box.appendChild(author);
+  // box.appendChild(link);
   box.appendChild(pPublic);
   parent.appendChild(box);
 
@@ -150,17 +145,20 @@ function unread(readBtn, box) {
     readBtn.addEventListener("click", function () {
       // delete Box
       const API = getAPI(readBooks);
-      const boxIndex = API.findIndex((e) => e.id == box.id);
-      const spliceAPI = API.splice(boxIndex, 1);
-      const unreadAPI = getAPI(unreadBooks);
-      const post = unreadAPI.concat(spliceAPI);
-      postAPI(unreadBooks, post);
-      renderUnread();
-      // update read
-      const removeAPI = API.filter((e) => e.id != box.id);
-      deleteAPI(readBooks);
-      postAPI(readBooks, removeAPI);
-      renderRead();
+      const findAPIIndex = API.findIndex((e) => e.id == box.id);
+      if (findAPIIndex !== -1) {
+        API[findAPIIndex].isComplete = false;
+        const spliceAPI = API.splice(findAPIIndex, 1);
+        const unreadAPI = getAPI(unreadBooks);
+        const post = unreadAPI.concat(spliceAPI);
+        postAPI(unreadBooks, post);
+        renderUnread();
+        // update read
+        const removeAPI = API.filter((e) => e.id != box.id);
+        deleteAPI(readBooks);
+        postAPI(readBooks, removeAPI);
+        renderRead();
+      }
     });
   }
 }
@@ -170,17 +168,20 @@ function alreadyRead(doneBtn, box) {
     doneBtn.addEventListener("click", function () {
       // delete box
       const API = getAPI(unreadBooks);
-      const boxIndex = API.findIndex((e) => e.id == box.id);
-      const spliceAPI = API.splice(boxIndex, 1);
-      const readAPI = getAPI(readBooks);
-      const post = readAPI.concat(spliceAPI);
-      postAPI(readBooks, post);
-      renderRead();
-      // update unread API
-      const removeAPI = API.filter((e) => e.id != box.id);
-      deleteAPI(unreadBooks);
-      postAPI(unreadBooks, removeAPI);
-      renderUnread();
+      const findAPIIndex = API.findIndex((e) => e.id == box.id);
+      if (findAPIIndex !== -1) {
+        API[findAPIIndex].isComplete = true;
+        const spliceAPI = API.splice(findAPIIndex, 1);
+        const readAPI = getAPI(readBooks);
+        const post = readAPI.concat(spliceAPI);
+        postAPI(readBooks, post);
+        renderRead();
+        // update unread API
+        const removeAPI = API.filter((e) => e.id != box.id);
+        deleteAPI(unreadBooks);
+        postAPI(unreadBooks, removeAPI);
+        renderUnread();
+      }
     });
 }
 
