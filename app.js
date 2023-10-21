@@ -40,13 +40,15 @@ function addNewBook() {
   const titleValue = title.value;
   const descValue = description.value;
   const publicValue = public.value;
+  const parseint = parseInt(publicValue);
+
   // const linkValue = linkBook.value;
   const timestamp = +new Date();
   let book = {
     id: timestamp,
     title: titleValue,
     author: descValue,
-    year: publicValue,
+    year: parseint,
     isComplete: false,
   };
   const API = getAPI(unreadBooks);
