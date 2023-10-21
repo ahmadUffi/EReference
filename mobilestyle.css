@@ -1,0 +1,40 @@
+@media screen and (max-width: 970px) {
+  header {
+    display: none;
+  }
+
+  .jumbotron {
+    display: inline-block;
+  }
+  .jumbotron aside.left {
+    z-index: 99;
+    width: 100%;
+    top: 20px;
+  }
+
+  .jumbotron aside.right {
+    width: 100%;
+    right: 0;
+    margin-top: 30px;
+  }
+
+  .jumbotron aside.left h2 {
+    font-size: 22px;
+  }
+
+  .book-manage .top {
+    flex-direction: column;
+  }
+
+  .book-manage .top form {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .book-manage .read {
+    margin-top: 30px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+}
